@@ -1,5 +1,9 @@
 const gameBoard = (function() {
-    const board = ["X", "X", "X", "X", "O", "X", "X", "O", "X"];
+    const board = [
+        "X", "X", "X", 
+        "O", "X", "X", 
+        "X", "X", "X"
+    ];
 
     return {
         render: function() {
