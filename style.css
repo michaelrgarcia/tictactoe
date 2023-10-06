@@ -1,7 +1,19 @@
 * {
     font-family: Arial, Helvetica, clean, sans-serif;
+
     padding: 0;
     margin: 0;
+}
+
+html,
+body {
+    height: 100%
+}
+
+body {
+    margin: 0;
+    background: #ffeeef;
+    color: #520;
 }
 
 .content {
@@ -33,6 +45,7 @@ main {
     align-items: center;
 
     font-size: 3.8em;
+    font-weight: bold;
 
     border-bottom: 2px dashed;
     border-left: 2px dashed;
