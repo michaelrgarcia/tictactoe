@@ -12,7 +12,9 @@
 
 h1 {
     margin-top: 15px;
-    margin-bottom: -10px;
+    margin-bottom: -5px;
+
+    font-size: 4em;
 }
 
 main {
@@ -30,7 +32,7 @@ main {
     justify-content: center;
     align-items: center;
 
-    font-size: 5em;
+    font-size: 3.8em;
 
     border-bottom: 2px dashed;
     border-left: 2px dashed;
