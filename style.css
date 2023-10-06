@@ -49,6 +49,8 @@ main {
 
     border-bottom: 2px dashed;
     border-left: 2px dashed;
+
+    user-select: none;
 }
 
 .cell:nth-child(1),
