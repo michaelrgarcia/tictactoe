@@ -33,16 +33,35 @@ const gameBoard = (function() {
                 let cell = document.createElement("button");
                 cell.classList.add("cell");
                 cell.setAttribute("data-cellnum", i)
-                cell.setAttribute("data-checked", false)
+
                 gameGrid.appendChild(cell);
             }
         },
 
         getBoard: function() {
             return board;
+        },
+
+        clickHandler: function() {
+            window.addEventListener("click", function(event) {
+                if (event.target.className === "play-button") {
+                    event.target.parentNode.replaceChildren();
+                    gameBoard.create();
+                }
+                if (event.target.className === "cell") {
+                    if (event.target.className !== "cell checked") {
+                        let selectedCell = event.target.dataset.cellnum;
+
+                        game.playRound(selectedCell);
+                    }
+                    event.target.classList.add("checked");
+                }
+            });
         }
     };
 })();
+
+gameBoard.clickHandler();
 
 const game = (function() {
     const player1 = createPlayer("Player 1", "X");
@@ -77,33 +96,6 @@ const game = (function() {
     };
 })();
 
-const misc = (function() {
-    return {
-        clickHandler: function() {
-            window.addEventListener("click", function(event) {
-                if (event.target.className === "play-button") {
-                    event.target.parentNode.replaceChildren();
-                    gameBoard.create();
-                }
-                if (event.target.className === "cell") {
-                    if (event.target.dataset.checked === "false") {
-                        let selectedCell = event.target.dataset.cellnum;
 
-                        game.playRound(selectedCell);
-                    }
-                    event.target.dataset.checked = "true";
-                }
-            });
-        }
-    }
-})();
-
-
-
-    const player1 = createPlayer("Player 1", "X");
-    const player2 = createPlayer("Player 2", "O");
-    let activePlayer;
-
-misc.clickHandler();
 
 
