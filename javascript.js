@@ -1,4 +1,8 @@
-const game = (function() {
+const createPlayer = (name, marker) => {
+    return { name, marker };
+};
+
+const gameBoard = (function() {
     const board = [
         "","","",
         "","","",
@@ -16,8 +20,10 @@ const game = (function() {
         [2, 4, 6]
     ];
 
+
+
     return {
-        createBoard: function() {
+        create: function() {
             const documentMain = document.querySelector("main");
             const gameGrid = document.createElement("div");
             gameGrid.classList.add("gameboard-grid");
@@ -27,23 +33,46 @@ const game = (function() {
                 let cell = document.createElement("button");
                 cell.classList.add("cell");
                 cell.setAttribute("data-cellnum", i)
+                cell.setAttribute("data-checked", false)
                 gameGrid.appendChild(cell);
             }
         },
+
         getBoard: function() {
             return board;
         }
     };
 })();
 
-const displayController = (function() {
+const game = (function() {
+    const player1 = createPlayer("Player 1", "X");
+    const player2 = createPlayer("Player 2", "O");
+    let activePlayer = player1;
+
+    const board = gameBoard.getBoard();
+
+    function switchPlayerTurn() {
+        if (activePlayer === player1) activePlayer = player2;
+        else activePlayer = player1; 
+    }
+
     return {
         renderBoard: function() {
             const cells = document.querySelectorAll(".cell");
     
             cells.forEach((cell, marker) => {
-                cell.textContent = game.getBoard()[marker];
+                cell.textContent = board[marker];
             });
+        },
+
+        getActivePlayer: function() {
+            return activePlayer;
+        },
+
+        playRound: function(cell) {
+            board.splice(cell, 1, activePlayer.marker);
+            game.renderBoard();
+            switchPlayerTurn();
         }
     };
 })();
@@ -54,22 +83,26 @@ const misc = (function() {
             window.addEventListener("click", function(event) {
                 if (event.target.className === "play-button") {
                     event.target.parentNode.replaceChildren();
-                    game.createBoard();
+                    gameBoard.create();
                 }
                 if (event.target.className === "cell") {
-                    let cellNumber = event.target.dataset.cellnum;
-                    game.getBoard().splice(cellNumber, 1, "X");
-                    displayController.renderBoard();
+                    if (event.target.dataset.checked === "false") {
+                        let selectedCell = event.target.dataset.cellnum;
+
+                        game.playRound(selectedCell);
+                    }
+                    event.target.dataset.checked = "true";
                 }
             });
         }
     }
 })();
 
-const createPlayer = (name, marker) => {
 
-    return { name, marker };
-};
+
+    const player1 = createPlayer("Player 1", "X");
+    const player2 = createPlayer("Player 2", "O");
+    let activePlayer;
 
 misc.clickHandler();
 
