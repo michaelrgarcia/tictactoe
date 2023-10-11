@@ -55,6 +55,11 @@ main {
     background: none;
 
     user-select: none;
+    cursor: pointer;
+}
+
+.checked {
+    cursor: default;
 }
 
 .cell:hover {
