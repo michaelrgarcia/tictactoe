@@ -36,6 +36,11 @@ const gameBoard = (function() {
 
                 gameGrid.appendChild(cell);
             }
+
+            const turnMessage = document.createElement("p");
+            turnMessage.classList.add("game-text");
+            turnMessage.textContent = `${game.getActivePlayer().name}, your turn!`;
+            documentMain.appendChild(turnMessage);
         },
 
         getBoard: function() {
@@ -73,6 +78,9 @@ const game = (function() {
     function switchPlayerTurn() {
         if (activePlayer === player1) activePlayer = player2;
         else activePlayer = player1; 
+
+        const currentPlayerText = document.querySelector(".game-text");
+        currentPlayerText.textContent = `${activePlayer.name}, your turn!`;
     }
 
     return {
