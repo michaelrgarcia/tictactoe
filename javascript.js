@@ -8,19 +8,6 @@ const gameBoard = (function() {
         "","","",
         "","",""
     ];
-    
-    const winningConditions = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6]
-    ];
-
-
 
     return {
         create: function() {
@@ -59,9 +46,12 @@ const gameBoard = (function() {
                 }
                 if (event.target.className === "cell") {
                     if (event.target.className !== "cell checked") {
-                        event.target.style.color = game.getActivePlayer().color;
+                        const currentPlayer = game.getActivePlayer();
+
+                        event.target.style.color = currentPlayer.color;
 
                         let selectedCell = event.target.dataset.cellnum;
+                        board.splice(selectedCell, 1, currentPlayer.marker);
 
                         game.playRound(selectedCell);
                     }
@@ -77,9 +67,8 @@ gameBoard.clickHandler();
 const game = (function() {
     const player1 = createPlayer("Player 1", "X", "red");
     const player2 = createPlayer("Player 2", "O", "green");
-    let activePlayer = player1;
-
     const board = gameBoard.getBoard();
+    let activePlayer = player1;
 
     function switchPlayerTurn() {
         if (activePlayer === player1) activePlayer = player2;
@@ -89,13 +78,42 @@ const game = (function() {
         currentPlayerText.textContent = `${activePlayer.name}, your turn!`;
     }
 
+    function checkWin() {
+        const winningConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        let won = winningConditions.some(winner => winner.every(cell => board[cell] === activePlayer.marker));
+        console.log(won);
+
+        if (won === true) {
+            const gbgrid = document.querySelector(".gameboard-grid");
+            const currentPlayerText = document.querySelector(".game-text");
+
+            currentPlayerText.textContent = `${activePlayer.name} wins!`;
+
+        }
+    
+
+    }
+
+    function stopGame() {
+        if (checkWin() === false) console.log("yo")
+    }
+
     return {
         renderBoard: function() {
             const cellText = document.querySelectorAll(".cell-text");
     
             cellText.forEach((cell, marker) => {
                 cell.textContent = board[marker];
-                //Make markers personal colors (use spans to style individual markers, maybe assign each cell to a player)
             });
         },
 
@@ -103,9 +121,9 @@ const game = (function() {
             return activePlayer;
         },
 
-        playRound: function(cell) {
-            board.splice(cell, 1, activePlayer.marker);
+        playRound: function() {
             game.renderBoard();
+            checkWin();
             switchPlayerTurn();
         }
     };
