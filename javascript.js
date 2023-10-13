@@ -1,5 +1,5 @@
-const createPlayer = (name, marker) => {
-    return { name, marker };
+const createPlayer = (name, marker, color) => {
+    return { name, marker, color };
 };
 
 const gameBoard = (function() {
@@ -32,9 +32,13 @@ const gameBoard = (function() {
             for (let i = 0; i < 9; i++) {
                 let cell = document.createElement("button");
                 cell.classList.add("cell");
-                cell.setAttribute("data-cellnum", i)
+                cell.setAttribute("data-cellnum", i);
+
+                let cellText = document.createElement("span");
+                cellText.classList.add("cell-text")
 
                 gameGrid.appendChild(cell);
+                cell.appendChild(cellText);
             }
 
             const turnMessage = document.createElement("p");
@@ -55,6 +59,8 @@ const gameBoard = (function() {
                 }
                 if (event.target.className === "cell") {
                     if (event.target.className !== "cell checked") {
+                        event.target.style.color = game.getActivePlayer().color;
+
                         let selectedCell = event.target.dataset.cellnum;
 
                         game.playRound(selectedCell);
@@ -69,8 +75,8 @@ const gameBoard = (function() {
 gameBoard.clickHandler();
 
 const game = (function() {
-    const player1 = createPlayer("Player 1", "X");
-    const player2 = createPlayer("Player 2", "O");
+    const player1 = createPlayer("Player 1", "X", "red");
+    const player2 = createPlayer("Player 2", "O", "green");
     let activePlayer = player1;
 
     const board = gameBoard.getBoard();
@@ -85,10 +91,11 @@ const game = (function() {
 
     return {
         renderBoard: function() {
-            const cells = document.querySelectorAll(".cell");
+            const cellText = document.querySelectorAll(".cell-text");
     
-            cells.forEach((cell, marker) => {
+            cellText.forEach((cell, marker) => {
                 cell.textContent = board[marker];
+                //Make markers personal colors (use spans to style individual markers, maybe assign each cell to a player)
             });
         },
 
