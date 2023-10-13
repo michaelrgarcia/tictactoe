@@ -44,11 +44,8 @@ main {
     justify-content: center;
     align-items: center;
 
-    font-size: 3.8em;
-    font-weight: bold;
-
-    border-bottom: 2px dashed;
-    border-left: 2px dashed;
+    border-bottom: 2px black dashed;
+    border-left: 2px black dashed;
     border-top: none;
     border-right: none;
 
@@ -56,6 +53,11 @@ main {
 
     user-select: none;
     cursor: pointer;
+}
+
+.cell-text {
+    font-size: 3.8em;
+    font-weight: bold;
 }
 
 .checked {
@@ -81,4 +83,14 @@ main {
 .cell:nth-child(8),
 .cell:nth-child(9) {
     border-bottom: none;
+}
+
+.game-text {
+    display: flex;
+    justify-content: center;
+    
+    margin-top: 35px;
+
+    font-size: 1.8em;
+    font-style: italic;
 }
