@@ -34,6 +34,14 @@ const gameBoard = (function() {
             documentMain.appendChild(turnMessage);
         },
 
+        render: function() {
+            const cellText = document.querySelectorAll(".cell-text");
+    
+            cellText.forEach((cell, marker) => {
+                cell.textContent = board[marker];
+            });
+        },
+
         getBoard: function() {
             return board;
         },
@@ -67,15 +75,36 @@ gameBoard.clickHandler();
 const game = (function() {
     const player1 = createPlayer("Player 1", "X", "red");
     const player2 = createPlayer("Player 2", "O", "green");
-    const board = gameBoard.getBoard();
     let activePlayer = player1;
 
-    function switchPlayerTurn() {
-        if (activePlayer === player1) activePlayer = player2;
-        else activePlayer = player1; 
+    const board = gameBoard.getBoard();
 
-        const currentPlayerText = document.querySelector(".game-text");
-        currentPlayerText.textContent = `${activePlayer.name}, your turn!`;
+    function stopGame(winner) {
+        if (winner === false && gb.textContent) return "😂";
+        else {
+            const cells = document.querySelectorAll(".cell");
+
+            cells.forEach((cell) => {
+                if (cell.className !== "cell checked") {
+                    cell.classList.add("checked");
+                }
+            })
+        }
+    }
+    
+    function switchPlayerTurn(winner) {
+        const gbtext = document.querySelector(".game-text");
+        
+        if (winner === true) {
+            stopGame(winner);
+            gbtext.textContent = `${activePlayer.name} wins!`
+        }
+        else if (winner === false) {
+            if (activePlayer === player1) activePlayer = player2;
+            else activePlayer = player1;
+
+            gbtext.textContent = `${activePlayer.name}, your turn!`;
+        }
     }
 
     function checkWin() {
@@ -91,40 +120,18 @@ const game = (function() {
         ];
 
         let won = winningConditions.some(winner => winner.every(cell => board[cell] === activePlayer.marker));
-        console.log(won);
 
-        if (won === true) {
-            const gbgrid = document.querySelector(".gameboard-grid");
-            const currentPlayerText = document.querySelector(".game-text");
-
-            currentPlayerText.textContent = `${activePlayer.name} wins!`;
-
-        }
-    
-
-    }
-
-    function stopGame() {
-        if (checkWin() === false) console.log("yo")
+        switchPlayerTurn(won);
     }
 
     return {
-        renderBoard: function() {
-            const cellText = document.querySelectorAll(".cell-text");
-    
-            cellText.forEach((cell, marker) => {
-                cell.textContent = board[marker];
-            });
-        },
-
         getActivePlayer: function() {
             return activePlayer;
         },
 
         playRound: function() {
-            game.renderBoard();
             checkWin();
-            switchPlayerTurn();
+            gameBoard.render();
         }
     };
 })();
