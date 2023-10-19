@@ -32,6 +32,12 @@ const gameBoard = (function() {
             turnMessage.classList.add("game-text");
             turnMessage.textContent = `${game.getActivePlayer().name}, your turn!`;
             documentMain.appendChild(turnMessage);
+
+            const resetButton = document.createElement("button");
+            resetButton.setAttribute("type", "button");
+            resetButton.classList.add("reset");
+            resetButton.textContent = "Reset";
+            documentMain.appendChild(resetButton);
         },
 
         render: function() {
