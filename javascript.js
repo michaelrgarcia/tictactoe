@@ -48,6 +48,14 @@ const gameBoard = (function() {
             });
         },
 
+        clear: function() {
+            board.forEach((cell, i) => {
+                if (cell) board[i] = "";
+            });
+
+            gameBoard.render();
+        },
+
         getBoard: function() {
             return board;
         },
@@ -57,6 +65,9 @@ const gameBoard = (function() {
                 if (event.target.className === "play-button") {
                     event.target.parentNode.replaceChildren();
                     gameBoard.create();
+                }
+                if (event.target.className === "reset") {
+                    gameBoard.clear();
                 }
                 if (event.target.className === "cell") {
                     if (event.target.className !== "cell checked") {
@@ -130,6 +141,10 @@ const game = (function() {
         switchPlayerTurn(won);
     }
 
+    function resetPlayer() {
+        activePlayer = player1;
+    }
+
     return {
         getActivePlayer: function() {
             return activePlayer;
@@ -138,7 +153,7 @@ const game = (function() {
         playRound: function() {
             checkWin();
             gameBoard.render();
-        }
+        },
     };
 })();
 
