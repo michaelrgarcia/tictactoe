@@ -110,6 +110,7 @@ main {
 
     font-size: 2.5rem;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .play-button:hover {
@@ -130,6 +131,7 @@ main {
 
     background-color: #520;
     color: #FFF;
+    cursor: pointer;
 }
 
 .reset:hover {
