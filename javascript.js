@@ -65,9 +65,11 @@ const gameBoard = (function() {
                 if (event.target.className === "play-button") {
                     event.target.parentNode.replaceChildren();
                     gameBoard.create();
+                    game.start();
                 }
                 if (event.target.className === "reset") {
                     gameBoard.clear();
+                    game.reset();
                 }
                 if (event.target.className === "cell") {
                     if (event.target.className !== "cell checked") {
@@ -93,37 +95,38 @@ const game = (function() {
     const player1 = createPlayer("Player 1", "X", "red");
     const player2 = createPlayer("Player 2", "O", "green");
     let activePlayer = player1;
+    let gameState = 0;
 
     const board = gameBoard.getBoard();
 
-    function stopGame(winner) {
-        if (winner === false && gb.textContent) return "😂";
-        else {
+    function gameStateController(reset) {
+        checkWin();
+        const gbtext = document.querySelector(".game-text");
+
+        if (gameState === 1 && !reset) {
+            if (activePlayer === player1) activePlayer = player2;
+            else activePlayer = player1;
+
+            gbtext.textContent = `${activePlayer.name}, your turn!`;
+
+        } else if (gameState === -1) {
             const cells = document.querySelectorAll(".cell");
 
             cells.forEach((cell) => {
                 if (cell.className !== "cell checked") {
                     cell.classList.add("checked");
                 }
-            })
-        }
-    }
-    
-    function switchPlayerTurn(winner) {
-        const gbtext = document.querySelector(".game-text");
-        
-        if (winner === true) {
-            stopGame(winner);
-            gbtext.textContent = `${activePlayer.name} wins!`
-        }
-        else if (winner === false) {
-            if (activePlayer === player1) activePlayer = player2;
-            else activePlayer = player1;
+            });
+
+            gbtext.textContent = `${activePlayer.name} wins!`;
+
+        } else if (gameState === 1 && reset) {
+            activePlayer = player1;
 
             gbtext.textContent = `${activePlayer.name}, your turn!`;
         }
     }
-
+    
     function checkWin() {
         const winningConditions = [
             [0, 1, 2],
@@ -138,11 +141,7 @@ const game = (function() {
 
         let won = winningConditions.some(winner => winner.every(cell => board[cell] === activePlayer.marker));
 
-        switchPlayerTurn(won);
-    }
-
-    function resetPlayer() {
-        activePlayer = player1;
+        if (won) gameState = -1;
     }
 
     return {
@@ -151,9 +150,27 @@ const game = (function() {
         },
 
         playRound: function() {
-            checkWin();
+            gameStateController();
             gameBoard.render();
         },
+
+        start: function() {
+            if (gameState === 0) gameState = 1;
+        },
+
+        reset: function() {
+            gameState = 1;
+    
+            const cells = document.querySelectorAll(".cell");
+    
+            cells.forEach((cell) => {
+                if (cell.className === "cell checked") {
+                    cell.classList.remove("checked");
+                }
+            });
+
+            gameStateController("reset");
+        }
     };
 })();
 
