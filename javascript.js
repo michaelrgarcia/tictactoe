@@ -9,9 +9,8 @@ const gameBoard = (function() {
         "","",""
     ];
 
-    return {
-        create: function() {
-            const documentMain = document.querySelector("main");
+    function create() {
+        const documentMain = document.querySelector("main");
             const gameGrid = document.createElement("div");
             gameGrid.classList.add("gameboard-grid");
             documentMain.appendChild(gameGrid);
@@ -38,22 +37,31 @@ const gameBoard = (function() {
             resetButton.classList.add("reset");
             resetButton.textContent = "Reset";
             documentMain.appendChild(resetButton);
-        },
+    }
 
+    function clear() {
+            board.forEach((cell, i) => {
+                if (cell) board[i] = "";
+            });
+
+            gameBoard.render();
+
+            const cells = document.querySelectorAll(".cell");
+    
+            cells.forEach((cell) => {
+                if (cell.className === "cell checked") {
+                    cell.classList.remove("checked");
+                }
+            });
+    }
+
+    return {
         render: function() {
             const cellText = document.querySelectorAll(".cell-text");
     
             cellText.forEach((cell, marker) => {
                 cell.textContent = board[marker];
             });
-        },
-
-        clear: function() {
-            board.forEach((cell, i) => {
-                if (cell) board[i] = "";
-            });
-
-            gameBoard.render();
         },
 
         getBoard: function() {
@@ -64,11 +72,11 @@ const gameBoard = (function() {
             window.addEventListener("click", function(event) {
                 if (event.target.className === "play-button") {
                     event.target.parentNode.replaceChildren();
-                    gameBoard.create();
+                    create();
                     game.start();
                 }
                 if (event.target.className === "reset") {
-                    gameBoard.clear();
+                    clear();
                     game.reset();
                 }
                 if (event.target.className === "cell") {
@@ -113,8 +121,9 @@ const game = (function() {
             activePlayer = player1;
 
             gbtext.textContent = `${activePlayer.name}, your turn!`;   
+        } 
 
-        } else if (gameState === -1) {
+        if (gameState === -1) {
             const cells = document.querySelectorAll(".cell");
 
             cells.forEach((cell) => {
@@ -124,8 +133,9 @@ const game = (function() {
             });
 
             gbtext.textContent = `${activePlayer.name} wins!`;
-            
-        } else if (gameState === -2) {
+        }
+
+        if (gameState === -2) {
             gbtext.textContent = `It's a tie!`;
         }
 }
@@ -165,14 +175,6 @@ const game = (function() {
 
         reset: function() {
             gameState = 1;
-    
-            const cells = document.querySelectorAll(".cell");
-    
-            cells.forEach((cell) => {
-                if (cell.className === "cell checked") {
-                    cell.classList.remove("checked");
-                }
-            });
 
             gameStateController("reset");
         }
