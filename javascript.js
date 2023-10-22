@@ -109,6 +109,11 @@ const game = (function() {
 
             gbtext.textContent = `${activePlayer.name}, your turn!`;
 
+        } else if (gameState === 1 && reset) {
+            activePlayer = player1;
+
+            gbtext.textContent = `${activePlayer.name}, your turn!`;   
+
         } else if (gameState === -1) {
             const cells = document.querySelectorAll(".cell");
 
@@ -119,13 +124,11 @@ const game = (function() {
             });
 
             gbtext.textContent = `${activePlayer.name} wins!`;
-
-        } else if (gameState === 1 && reset) {
-            activePlayer = player1;
-
-            gbtext.textContent = `${activePlayer.name}, your turn!`;
+            
+        } else if (gameState === -2) {
+            gbtext.textContent = `It's a tie!`;
         }
-    }
+}
     
     function checkWin() {
         const winningConditions = [
@@ -140,8 +143,10 @@ const game = (function() {
         ];
 
         let won = winningConditions.some(winner => winner.every(cell => board[cell] === activePlayer.marker));
+        let tie = board.every(cell => cell && !won);
 
         if (won) gameState = -1;
+        if (tie) gameState = -2;
     }
 
     return {
