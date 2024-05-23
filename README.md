@@ -6,4 +6,4 @@ For now, each player will have a separate term and will work as any normal game 
 
 I scrapped the AI idea, as I need to move on to a new project. I figured I'd have more ambitious projects in the future, rather than focusing on making this simple tic tac toe game the best.
 
-You can find it here: https://leavesturninsideyou.github.io/tictactoe/
+You can find it here: https://michaelrgarcia.github.io/tictactoe/
